@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f97d43;
+            color: black;
+        }
+
+        header {
+            background-color: #e85d04;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        #search-input {
+            padding: 10px;
+            width: 300px;
+            border-radius: 20px;
+            border: 1px solid #333;
+        }
+
+        #search-btn {
+            margin-left: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #333;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Chatbot */
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #e85d04;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        #chat-box {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #chat-header {
+            background-color: #e85d04;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        #chat-content {
+            height: 200px;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        #chat-input {
+            width: 85%;
+            padding: 10px;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        #send-btn {
+            width: 15%;
+            background-color: #e85d04;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>food-delivery</h1>
+    <nav>
+        <ul>
+            <li><a href="inscription.html">Inscription</a></li>
+            <li><a href="connexion.html">Connexion</a></li>
+            <li><a href="index.html">Accueil</a></li>
+        </ul>
+    </nav>
+</header>
+
+<p id="user-info"></p>
+
+<main>
+    <section class="search-section">
+        <input type="text" id="search-input" placeholder="Rechercher un plat...">
+        <button id="search-btn">🔍</button>
+    </section>
+</main>
+
+<!-- Chatbot -->
+<div id="chat-icon">💬</div>
+<div id="chat-box">
+    <div id="chat-header">Chatbot</div>
+    <div id="chat-content"></div>
+    <input type="text" id="chat-input" placeholder="Écrivez votre message...">
+    <button id="send-btn">Envoyer</button>
+</div>
+
+<script>
+    document.getElementById('search-btn').addEventListener('click', function() {
+        let searchQuery = document.getElementById('search-input').value;
+        alert('Recherche: ' + searchQuery);
+    });
+
+    document.getElementById('chat-icon').addEventListener('click', function() {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.getElementById('send-btn').addEventListener('click', function() {
+        let userMessage = document.getElementById('chat-input').value;
+        if(userMessage.trim() !== "") {
+            document.getElementById('chat-content').innerHTML += "<p><strong>Vous:</strong> " + userMessage + "</p>";
+            document.getElementById('chat-input').value = "";
+        }
+    });
+
+    // Vérifier l'utilisateur connecté
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('http://localhost:5000/api/user')
+            .then(response => response.json())
+            .then(data => {
+                if(data.success) {
+                    document.getElementById('user-info').innerHTML = "Bienvenue, " + data.email;
+                } else {
+                    document.getElementById('user-info').innerHTML = "<a href='connexion.html'>Se connecter</a>";
+                }
+            })
+            .catch(error => console.error('Erreur:', error));
+    });
+</script>
+
+</body>
+</html>

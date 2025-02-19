@@ -4,7 +4,6 @@ import com.bilal.deliveryservice.entity.DeliveryPerson;
 import com.bilal.deliveryservice.entity.Order;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component

@@ -18,9 +18,23 @@ public class Client {
     private String name;
     private String email;
     private String phone;
-    // Constructeur sans ID pour éviter le problème
-    public Client(String name, String email, String phone) {
+    private String password; // 🔹 Ajout du mot de passe
+
+    // Constructeur sans ID
+    public Client(String name, String email, String phone, String password) {
         this.name = name;
         this.email = email;
-        this.phone = phone;}
+        this.phone = phone;
+        this.password = password;
+    }
+
+
+// Assure-toi que les getters et setters sont bien générés
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }

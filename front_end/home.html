@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F-D Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom right, #ff5733, #ff8c42);
+            color: black;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #ff5733;
+            color: white;
+            align-items: center;
+        }
+        .search-bar-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px auto;
+        }
+        .search-bar {
+            padding: 12px;
+            width: 60%;
+            border-radius: 25px;
+            border: 2px solid #ff5733;
+            font-size: 16px;
+        }
+        .search-button {
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            background: #ff5733;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-button:hover {
+            background: #e64a2e;
+        }
+        .stores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            padding: 20px;
+        }
+        .store-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+            width: 150px;
+            text-align: center;
+        }
+        .store-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .store-item:hover {
+            transform: translateY(-3px);
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            background: #ff5733;
+            color: white;
+            font-size: 0.9em;
+        }
+        .chat-bot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+        }
+        .chat-bot {
+            background: #ff5733;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+        .chat-box {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex-direction: column;
+        }
+        .chat-header {
+            background: #ff5733;
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header .close-btn {
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .chat-body {
+            padding: 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .chat-footer {
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-footer input {
+            flex-grow: 1;
+            padding: 8px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
+        .chat-footer button {
+            background: #ff5733;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+        .chat-footer button:hover {
+            background: #e64a2e;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>F-D</h1>
+    <button onclick="location.href='connexion.html'" style="padding: 8px 20px; border-radius: 20px; border: none;">Login</button>
+</header>
+
+<h2>Welcome to Food Delivery</h2>
+<div class="search-bar-container">
+    <input type="text" placeholder="Rechercher un plat ou un restaurant..." class="search-bar" id="searchInput">
+    <button class="search-button" onclick="searchItems()">🔍</button>
+</div>
+
+<div class="stores-section">
+    <h3>Restaurants Disponibles</h3>
+    <div class="stores" id="restaurantList">
+        <!-- Les restaurants seront chargés ici -->
+    </div>
+</div>
+
+<footer>
+    Copyright: fsr-2025-project_spring_boot
+</footer>
+
+<div class="chat-bot-container">
+    <button class="chat-bot" onclick="toggleChat()">💬</button>
+</div>
+
+<div class="chat-box" id="chatBox">
+    <div class="chat-header">
+        <span>Chat</span>
+        <span class="close-btn" onclick="toggleChat()">✖</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <!-- Messages seront affichés ici -->
+    </div>
+    <div class="chat-footer">
+        <input type="text" placeholder="Écrire un message..." id="chatInput">
+        <button onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
+<script>
+    async function fetchRestaurants() {
+        const response = await fetch("http://localhost:8888/api/restaurant/list");
+        const restaurants = await response.json();
+        const restaurantList = document.getElementById("restaurantList");
+        restaurantList.innerHTML = restaurants.map(r => `
+            <div class="store-item" onclick="showMenu('${r.id}')">
+                <img src="image/${r.id}.jpg" alt="${r.name}">
+                <div>${r.name}</div>
+            </div>
+        `).join('');
+    }
+
+    function showMenu(restaurantId) {
+        window.location.href = `restaurant.html?id=${restaurantId}`;
+    }
+
+    function searchItems() {
+        const query = document.getElementById("searchInput").value.toLowerCase();
+        alert("Recherche pour : " + query);
+    }
+
+    function toggleChat() {
+        var chatBox = document.getElementById("chatBox");
+        chatBox.style.display = (chatBox.style.display === "none" || chatBox.style.display === "") ? "flex" : "none";
+    }
+
+    function sendMessage() {
+        const chatInput = document.getElementById("chatInput");
+        const chatBody = document.getElementById("chatBody");
+        if (chatInput.value.trim() !== "") {
+            const message = document.createElement("div");
+            message.textContent = chatInput.value;
+            chatBody.appendChild(message);
+            chatInput.value = "";
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+    }
+
+    // Charger les restaurants au démarrage
+    fetchRestaurants();
+</script>
+</body>
+</html>

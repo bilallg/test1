@@ -3,13 +3,12 @@ package com.bilal.deliveryservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Getter@Setter
-public class DeliveryPerson {
 
+@Getter
+@Setter
+@Entity
+public class DeliveryPerson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,8 +16,8 @@ public class DeliveryPerson {
     private String name;
     private String phone;
     private String email;
-
     private String vehicleDetails;
+
     public DeliveryPerson(Long id, String name, String phone, String email, String vehicleDetails) {
         this.id = id;
         this.name = name;
@@ -26,5 +25,4 @@ public class DeliveryPerson {
         this.email = email;
         this.vehicleDetails = vehicleDetails;
     }
-
 }

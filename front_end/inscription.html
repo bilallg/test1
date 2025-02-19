@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - F-D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom right, #ff5733, #ff8c42);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            text-align: center;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #ff5733;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #e64a2e;
+        }
+        .link {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #777;
+        }
+        .link a {
+            color: #ff5733;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Inscription</h2>
+    <select id="role">
+        <option value="client">Client</option>
+        <option value="restaurant">Restaurant</option>
+        <option value="deliveryPerson">Livreur</option>
+    </select>
+    <input type="text" id="name" placeholder="Nom">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="phone" placeholder="Téléphone">
+    <input type="password" id="password" placeholder="Mot de passe">
+    <button onclick="register()">S'inscrire</button>
+
+    <p class="link">Déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+</div>
+
+<script>
+    function register() {
+        const role = document.getElementById("role").value;
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
+        const password = document.getElementById("password").value;
+
+        if (!name || !email || !phone || !password) {
+            alert("Veuillez remplir tous les champs.");
+            return;
+        }
+
+        fetch(`http://localhost:8888/api/${role}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, phone, password })
+        })
+
+                .then(response => {
+                if (response.ok) {
+                    alert("Inscription réussie !");
+                    window.location.href = `${role}.html`;  // Redirige vers la page correspondante
+                } else {
+                    throw new Error("Échec de l'inscription.");
+                }
+            })
+            .catch(error => alert(error.message));
+    }
+</script>
+</body>
+</html>

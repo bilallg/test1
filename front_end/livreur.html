@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Livreur - F-D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #ff5733, #ff8c42);
+            color: black;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #ff5733;
+            color: white;
+            position: relative;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+        .logo:hover {
+            color: #f0f0f0;
+        }
+        #deliveryName {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .notification {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+        .notification span {
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 12px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px auto;
+            text-align: center;
+            width: 300px;
+        }
+        .menu button {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            width: 100%;
+        }
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .content {
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            text-align: center;
+        }
+        .content h2 {
+            margin-top: 0;
+            color: #ff5733;
+        }
+        .notification-content {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            width: 300px;
+        }
+        .notification-content h3 {
+            margin-top: 0;
+            color: #ff5733;
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            background: #ff5733;
+            color: white;
+            font-size: 0.9em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo" onclick="goToHome()">F-D</div>
+    <div class="notification" onclick="toggleNotification()">🔔<span id="notifCount">1</span></div>
+    <div id="deliveryName">Jean Dupont</div>
+</div>
+
+<div class="notification-content" id="notificationContent">
+    <h3>Nouvelles commandes</h3>
+    <p><strong>Commande #1</strong></p>
+    <p>Client: Paul Martin</p>
+    <p>Adresse: 12 Rue de Paris</p>
+    <p>Restaurant: Pizza Hut</p>
+    <p>Adresse: 45 Avenue Centrale</p>
+    <p>Commande: 2 Pizzas + 1 Boisson</p>
+    <p><strong>Prix: 24€</strong></p>
+</div>
+
+<div class="menu">
+    <button onclick="showOrders()">Liste des commandes</button>
+    <button onclick="showRestaurants()">Liste des restaurants</button>
+    <button onclick="showProfileForm()">Modifier mon profil</button>
+</div>
+
+<div class="content" id="content">
+    <h2>Bienvenue, Livreur</h2>
+    <p>Sélectionnez une option dans le menu pour commencer.</p>
+</div>
+
+<footer>
+    Copyright: fsr-2025-project_spring_boot
+</footer>
+
+<script>
+    function goToHome() {
+        window.location.href = "home.html";
+    }
+    function toggleNotification() {
+        const notifBox = document.getElementById("notificationContent");
+        notifBox.style.display = notifBox.style.display === "block" ? "none" : "block";
+    }
+    function showOrders() {
+        document.getElementById("content").innerHTML = `
+                <h2>Liste des commandes</h2>
+                <ul>
+                    <li>Commande #1 - Paul Martin, 12 Rue de Paris - 2 Pizzas + 1 Boisson - <strong>24€</strong></li>
+                    <li>Commande #2 - Sophie Durand, 8 Boulevard Haussmann - 1 Burger + Frites - <strong>15€</strong></li>
+                </ul>`;
+    }
+    function showRestaurants() {
+        document.getElementById("content").innerHTML = `
+                <h2>Liste des restaurants</h2>
+                <ul>
+                    <li>Pizza Hut - 45 Avenue Centrale</li>
+                    <li>Burger King - 78 Rue Lafayette</li>
+                </ul>`;
+    }
+    function showProfileForm() {
+        document.getElementById("content").innerHTML = `
+                <h2>Modifier mon profil</h2>
+                <form>
+                    <input type="text" placeholder="Nom complet">
+                    <input type="tel" placeholder="Téléphone">
+                    <input type="password" placeholder="Mot de passe">
+                    <button>Enregistrer</button>
+                </form>`;
+    }
+</script>
+</body>
+</html>

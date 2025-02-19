@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Restaurant - F-D</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #ff5733, #ff8c42);
+            color: black;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #ff5733;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+        .logo:hover {
+            color: #f0f0f0;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px;
+        }
+        .menu button {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+        }
+        .menu button:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .content {
+            margin: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .content h2 {
+            margin-top: 0;
+            color: #ff5733;
+        }
+        .profile-form, .add-dish-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .profile-form input, .profile-form textarea, .add-dish-form input, .add-dish-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .profile-form button, .add-dish-form button {
+            padding: 10px 20px;
+            background: #ff5733;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .profile-form button:hover, .add-dish-form button:hover {
+            background: #e64a2e;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            color: red;
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            background: #ff5733;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="logo" onclick="goToHome()">F-D</div>
+    <div id="restaurantName">Restaurant XYZ</div>
+</div>
+
+<div class="menu">
+    <button onclick="showMenu()">Voir le Menu</button>
+    <button onclick="showAddDishForm()">Ajouter un Plat</button>
+    <button onclick="showProfile()">Modifier Profil</button>
+    <button onclick="showOrders()">Voir Commandes</button>
+</div>
+
+<div class="content" id="content"></div>
+
+<footer>
+    Copyright: fsr-2025-project_spring_boot
+</footer>
+
+<script>
+    const API_BASE_URL = "http://localhost:8888/api/restaurants";
+
+    function goToHome() {
+        window.location.href = "home.html";
+    }
+
+    function closeContent() {
+        document.getElementById("content").innerHTML = "";
+    }
+
+    // 🔥 Afficher le menu du restaurant depuis le backend
+    function showMenu() {
+        fetch(`${API_BASE_URL}/menu`)
+            .then(response => response.json())
+            .then(data => {
+                const menuItems = data.map(item => `<li>${item.name} - ${item.price}€</li>`).join("");
+                document.getElementById("content").innerHTML = `
+                    <h2>Menu du Restaurant</h2>
+                    <span class="close-btn" onclick="closeContent()">×</span>
+                    <ul>${menuItems}</ul>
+                `;
+            })
+            .catch(error => console.error("Erreur lors de la récupération du menu :", error));
+    }
+
+    // 🔥 Formulaire pour ajouter un plat au menu
+    function showAddDishForm() {
+        document.getElementById("content").innerHTML = `
+            <h2>Ajouter un Plat</h2>
+            <span class="close-btn" onclick="closeContent()">×</span>
+            <form class="add-dish-form">
+                <input type="text" placeholder="Nom du plat" id="dishName">
+                <input type="number" placeholder="Prix" id="dishPrice">
+                <textarea placeholder="Description du plat" id="dishDescription"></textarea>
+                <button type="button" onclick="addDish()">Ajouter</button>
+            </form>
+        `;
+    }
+
+    // 🔥 Ajouter un plat au menu via le backend
+    function addDish() {
+        const dish = {
+            name: document.getElementById("dishName").value,
+            price: document.getElementById("dishPrice").value,
+            description: document.getElementById("dishDescription").value
+        };
+
+        fetch(`${API_BASE_URL}/add-dish`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dish)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Plat ajouté avec succès !");
+                showMenu();
+            })
+            .catch(error => console.error("Erreur lors de l'ajout du plat :", error));
+    }
+
+    // 🔥 Modifier les informations du restaurant
+    function showProfile() {
+        document.getElementById("content").innerHTML = `
+            <h2>Modifier le Profil</h2>
+            <span class="close-btn" onclick="closeContent()">×</span>
+            <form class="profile-form">
+                <input type="text" placeholder="Nom du restaurant" id="restaurantNameInput">
+                <input type="text" placeholder="Adresse" id="restaurantAddress">
+                <input type="tel" placeholder="Téléphone" id="restaurantPhone">
+                <button type="button" onclick="updateProfile()">Enregistrer</button>
+            </form>
+        `;
+    }
+
+    // 🔥 Enregistrer les modifications du profil
+    function updateProfile() {
+        const updatedProfile = {
+            name: document.getElementById("restaurantNameInput").value,
+            address: document.getElementById("restaurantAddress").value,
+            phone: document.getElementById("restaurantPhone").value
+        };
+
+        fetch(`${API_BASE_URL}/update`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(updatedProfile)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert("Profil mis à jour !");
+                document.getElementById("restaurantName").textContent = updatedProfile.name;
+            })
+            .catch(error => console.error("Erreur lors de la mise à jour du profil :", error));
+    }
+
+    // 🔥 Voir les commandes en attente
+    function showOrders() {
+        fetch(`${API_BASE_URL}/orders`)
+            .then(response => response.json())
+            .then(data => {
+                const ordersList = data.map(order => `
+                    <li>Commande #${order.id} - ${order.clientName} - ${order.totalPrice}€</li>
+                `).join("");
+
+                document.getElementById("content").innerHTML = `
+                    <h2>Commandes en attente</h2>
+                    <span class="close-btn" onclick="closeContent()">×</span>
+                    <ul>${ordersList}</ul>
+                `;
+            })
+            .catch(error => console.error("Erreur lors de la récupération des commandes :", error));
+    }
+</script>
+</body>
+</html>

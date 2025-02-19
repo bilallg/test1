@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Client - F-D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #ff5733, #ff8c42);
+            color: black;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #ff5733;
+            color: white;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+        }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+        .search-bar-container {
+            position: relative;
+            width: 60%;
+        }
+        .search-bar {
+            width: 100%;
+            padding: 10px 40px 10px 20px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff5733;
+            cursor: pointer;
+        }
+        .menu-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px;
+        }
+        .menu-button {
+            padding: 10px 20px;
+            background: #ff5733;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            transition: background 0.3s ease;
+        }
+        .menu-button:hover {
+            background: #e64a2e;
+        }
+        .content {
+            margin: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .content h2 {
+            color: #ff5733;
+        }
+        footer {
+            margin-top: auto;
+            padding: 15px;
+            background: #ff5733;
+            color: white;
+            text-align: center;
+        }
+        .chat-bot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+        }
+        .chat-bot {
+            background: #ff5733;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border: none;
+            color: white;
+            font-size: 24px;
+        }
+        .logout-button {
+            background: red;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .logout-button:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo" onclick="goToHome()">F-D</div>
+    <div id="clientName">Chargement...</div>
+    <button class="logout-button" onclick="logout()">Se déconnecter</button>
+</div>
+
+<div class="search-container">
+    <div class="search-bar-container">
+        <input type="text" class="search-bar" placeholder="Rechercher un repas ou un restaurant...">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+</div>
+
+<div class="menu-container">
+    <button class="menu-button" onclick="showRestaurants()">Restaurants</button>
+    <button class="menu-button" onclick="showOrders()">Mes Commandes</button>
+    <button class="menu-button" onclick="showProfile()">Profil</button>
+</div>
+
+<div class="content">
+    <h2>Repas qui pourraient vous plaire</h2>
+</div>
+
+<footer>
+    Copyright: fsr-2025-project_spring_boot
+</footer>
+
+<div class="chat-bot-container">
+    <button class="chat-bot" onclick="toggleChat()">💬</button>
+</div>
+
+<script>
+    function goToHome() {
+        window.location.href = "home.html";
+    }
+
+    function logout() {
+        localStorage.removeItem("clientName");
+        window.location.href = "connexion.html";
+    }
+
+    function showRestaurants() {
+        alert("Liste des restaurants chargée !");
+    }
+
+    function showOrders() {
+        alert("Affichage des commandes !");
+    }
+
+    function showProfile() {
+        alert("Affichage du profil !");
+    }
+
+    function toggleChat() {
+        alert("Chatbot activé !");
+    }
+
+    // Afficher le nom du client connecté
+    const clientName = localStorage.getItem("clientName");
+    if (clientName) {
+        document.getElementById("clientName").textContent = "Bienvenue, " + clientName;
+    } else {
+        document.getElementById("clientName").textContent = "Bienvenue !";
+    }
+</script>
+
+</body>
+</html>
